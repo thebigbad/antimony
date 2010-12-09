@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css"
+    href="chrome://antimony/skin/stylesheets/stylesheet.css" ?>
+<!DOCTYPE overlay SYSTEM "chrome://antimony/locale/stringbundle.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="text/javascript" src="chrome://antimony/content/socket.io.js" />
+  <script type="text/javascript" src="chrome://antimony/content/content.js" />
+  <menubar id="main-menubar">
+    <menu label="&antimony.menu.title;" insertbefore="tools-menu">
+      <menupopup>
+        <menuitem label="&antimony.menu.item;" oncommand="alert('Hello World!');"/>
+      </menupopup>
+    </menu>
+  </menubar>
+</overlay>

@@ -1,0 +1,7 @@
+<!-- See: https://developer.mozilla.org/en/Localizing_an_extension -->
+<!ENTITY antimony.menu.title "antimony">
+<!ENTITY antimony.menu.item "Say Hi">
+
+<!ENTITY antimony.about "antimony">
+<!ENTITY antimony.about.close "close">
+

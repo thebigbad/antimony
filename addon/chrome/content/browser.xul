@@ -3,8 +3,7 @@
     href="chrome://antimony/skin/stylesheets/stylesheet.css" ?>
 <!DOCTYPE overlay SYSTEM "chrome://antimony/locale/stringbundle.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <iframe id="antimony" name="antimony" style="display: none" src="http://localhost:1234/runner.html"></iframe>
-  <script type="text/javascript" src="chrome://antimony/content/content.js" />
+  <iframe name="antimony" style="display: none" src="http://localhost:1234/runner.html"></iframe>
   <menubar id="main-menubar">
     <menu label="&antimony.menu.title;" insertbefore="tools-menu">
       <menupopup>

@@ -2,5 +2,4 @@ content antimony chrome/content/
 content antimony chrome/content/ contentaccessible=yes
 locale  antimony en-US locale/en-US/
 skin    antimony classic/1.0 chrome/skin/
-resource antimony chrome/modules/
 overlay chrome://browser/content/browser.xul chrome://antimony/content/browser.xul

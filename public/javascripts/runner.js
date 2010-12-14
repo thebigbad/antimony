@@ -1,10 +1,11 @@
-netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead UniversalBrowserWrite UniversalXPConnect');
 
 // handle communication with the server
 var Server = function (requestHandler) {
   var that = this;
   this.requestHandler = requestHandler;
   var socket = this.socket = new io.Socket('localhost', {
+    port: 1234,
     transports: ['websocket', 'htmlfile', 'xhr-multipart', 'xhr-polling']
   });
   socket.connect();
@@ -19,6 +20,18 @@ Server.prototype.readMessage = function (json) {
   this.requestHandler(obj);
 };
 
+var Cc = Components.classes,
+    Ci = Components.interfaces;
+
+var Tab = function (url) {
+  var windowManager = Cc["@mozilla.org/appshell/window-mediator;1"].
+      getService(Ci.nsIWindowMediator);
+  var chromeWindow = windowManager.getMostRecentWindow("navigator:browser");
+  var gBrowser = chromeWindow.gBrowser;
+  var tab = gBrowser.addTab(url);
+};
+
 var server = new Server(function (request) {
-  alert(JSON.stringify(request));
+  new Tab(request.url);
 });
+

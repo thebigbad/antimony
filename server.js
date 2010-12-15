@@ -1,38 +1,44 @@
 var http = require('http'),
     router = require('./router');
 
-var timestamp = function () { return (new Date()).getTime(); };
-
-var pushResponses = [];
-
-var push = http.createServer(function (req, res) {
-  console.log('push connected');
-  pushResponses.push(res);
-});
-push.listen(1234);
-
+var id = 0;
+var pushRes = null;
+var clientMessages = [];
 var clientResponses = {};
 
+var forwardNextMessage = function () {
+  if (!pushRes) { return; }
+  if (clientMessages.length === 0) { return; }
+  var message = clientMessages.shift();
+  var res = clientResponses[message.id];
+  var json = message.json;
+  console.log('\tsending to push ' + json);
+  pushRes.writeHead(200, {'Content-Type': 'application/json'});
+  pushRes.end(json);
+  pushRes = null;
+};
+
+http.createServer(function (req, res) {
+  console.log('push connected');
+  pushRes = res;
+  forwardNextMessage();
+}).listen(1234);
+
 router.post('client', function (req, res) {
-  var id = timestamp();
-  console.log('post from client (' + id + ')');
 
   var json = '';
   req.on('data', function (data) { json += data; });
   req.on('end', function (data) {
     if (data) { json += data; }
 
-    console.log('\tsaving response');
-    clientResponses[id] = res;
-
+    id++;
     var data = JSON.parse(json);
     data.id = id;
     json = JSON.stringify(data);
-    console.log('\tsending to push: ' + json);
-    pushRes = pushResponses.pop();
-    pushResponses = [];
-    pushRes.writeHead(200, {'Content-Type': 'application/json'});
-    pushRes.end(json);
+    console.log('\tsaving message (' + id + ')');
+    clientMessages.push({ id: id, json: json});
+    clientResponses[id] = res;
+    forwardNextMessage();
   });
 });
 
@@ -49,8 +55,8 @@ router.post('browser/:id', function (req, res, id) {
     delete clientResponses[id];
     clientRes.writeHead(200);
     clientRes.end(json);
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('OREN FOR PRESIDENT');
+    res.writeHead(204);
+    res.end();
   });
 });
 

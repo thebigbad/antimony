@@ -1,5 +1,8 @@
 Components.utils.import('resource://antimony/common.js');
-require.path.push('resource://antimony');
+require.path = [
+  'resource://antimony',
+  'file:///home/ryan/repos/borderstylo/curatron/lib'
+];
 
 var $ = require('windex');
 

@@ -1,0 +1,6 @@
+[submodule "vendor/commonjs-ffext"]
+	path = vendor/commonjs-ffext
+	url = git@github.com:borderstylo/commonjs-ffext.git
+[submodule "vendor/windex"]
+	path = vendor/windex
+	url = git@github.com:borderstylo/windex.git

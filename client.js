@@ -1,13 +1,17 @@
 var request = require('request');
 
-var runOnPage = function (url, f, callback) {
+var Client = function (host) {
+  this.host = host;
+};
+
+Client.prototype.runOnPage = function (url, f, callback) {
   var data = {
     type: 'page',
     url: url,
     script: f.toString()
   };
   var params = {
-    uri: 'http://localhost:1235/client',
+    uri: 'http://' + this.host + '/client',
     method: 'POST',
     body: JSON.stringify(data)
   };
@@ -17,13 +21,4 @@ var runOnPage = function (url, f, callback) {
   });
 };
 
-runOnPage(
-  'http://jquery.com',
-  function (callback) {
-    $(document.body).html('Boo yeah!');
-    callback($(document.body).html());
-  },
-  function (data) {
-    console.log(data);
-  }
-);
+module.exports = Client;

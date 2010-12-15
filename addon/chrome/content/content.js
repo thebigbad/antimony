@@ -1,3 +1,8 @@
+Components.utils.import('resource://antimony/common.js');
+require.path.push('resource://antimony');
+
+var $ = require('windex');
+
 var Poller = function (url, handler) {
   this.xhr = null;
   this.url = url;
@@ -28,6 +33,28 @@ Poller.prototype.restart = function () {
   this.connect();
 };
 
+var runInBrowser = function (script, callback) {
+  eval('var f = ' + script);
+  f(callback);
+};
+
+var runOnPage = function (url, script, callback) {
+  var tab = gBrowser.selectedTab = gBrowser.addTab(url);
+  var browser = gBrowser.getBrowserForTab(tab);
+  var chwin = window;
+  chwin.addEventListener('DOMContentLoaded', function (e) {
+    var document = browser.contentDocument.wrappedJSObject;
+    if (!document || e.originalTarget != document) { return; }
+    chwin.removeEventListener('DOMContentLoaded', arguments.callee, false);
+    var window = document.defaultView;
+    eval('var f = ' + script);
+    f(function (data) {
+      callback(data);
+      gBrowser.removeTab(tab);
+    });
+  }, false);
+};
+
 var messageQueue = [];
 
 var running = false;
@@ -36,14 +63,26 @@ var processNext = function () {
   running = true;
   var json = messageQueue.shift();
   var message = JSON.parse(json);
-  eval('var f = ' + message.script);
-  f(function (data) {
+  var callback = function (data) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'http://localhost:1235/browser/' + message.id, true);
     xhr.send(JSON.stringify({res: data}));
     running = false;
     processNext();
-  });
+  };
+  try {
+    if (message.type == 'page') {
+      runOnPage(message.url, message.script, callback);
+    }
+    else {
+      runInBrowser(message.script, callback);
+    }
+  }
+  catch (e) {
+    Cu.reportError(e);
+    running = false;
+    processNext();
+  }
 };
 
 new Poller('http://localhost:1234/', function (json) {

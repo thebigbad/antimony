@@ -31,7 +31,6 @@ exports.notFound = function (response) {
 exports.server = http.createServer(function (request, response) {
   var method = request.method.toLowerCase();
   var path = url_parse(request.url).pathname.replace(/\/$/, '');
-  console.log(method + ': ' + path);
   var matchingRoutes = routes[method].filter(function (route) {
     return route.regex.test(path);
   });

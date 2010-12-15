@@ -58,20 +58,12 @@ var runOnPage = function (url, script, callback) {
   }, false);
 };
 
-var messageQueue = [];
-
-var running = false;
-var processNext = function () {
-  if (running || messageQueue.length === 0) { return; }
-  running = true;
-  var json = messageQueue.shift();
+new Poller('http://localhost:1234/', function (json) {
   var message = JSON.parse(json);
   var callback = function (data) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'http://localhost:1235/browser/' + message.id, true);
     xhr.send(JSON.stringify({res: data}));
-    running = false;
-    processNext();
   };
   try {
     if (message.type == 'page') {
@@ -83,12 +75,6 @@ var processNext = function () {
   }
   catch (e) {
     Cu.reportError(e);
-    running = false;
-    processNext();
+    callback(e);
   }
-};
-
-new Poller('http://localhost:1234/', function (json) {
-  messageQueue.push(json);
-  processNext();
 });

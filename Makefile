@@ -4,8 +4,8 @@ package : clean
 
 build : clean
 					cp -R addon/* build/ && \
-            cp vendor/windex/windex.js addon/chrome/modules/ && \
-            cp vendor/commonjs-ffext/common.js addon/chrome/modules/
+            cp vendor/windex/windex.js build/chrome/modules/ && \
+            cp vendor/commonjs-ffext/common.js build/chrome/modules/
 
 clean :
 					rm -fr antimony.xpi build/*

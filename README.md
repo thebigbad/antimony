@@ -13,7 +13,7 @@ Ways in which Antimony kicks Selenium's ass:
 Setup
 ===
 
-* clone the repo `git clone git@repo.borderstylo.com:antimony.git`
+* clone the repo `git clone git://github.com/borderstylo/antimony.git`
 * start the server `nodes server.js`
 * build the extension `make`
 * open antimony.xpi in firefox

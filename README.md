@@ -1,3 +1,6 @@
+Antimony
+==
+
 Antimony is automated testing in the browser done right.
 
 Ways in which Antimony kicks Selenium's ass:
@@ -10,9 +13,9 @@ Ways in which Antimony kicks Selenium's ass:
 Setup
 ===
 
-* clone the repo @git clone git@repo.borderstylo.com:antimony.git@
-* start the server @nodes server.js@
-* build the extension @make@
+* clone the repo `git clone git@repo.borderstylo.com:antimony.git`
+* start the server `nodes server.js`
+* build the extension `make`
 * open antimony.xpi in firefox
 
 Testing with Curl
